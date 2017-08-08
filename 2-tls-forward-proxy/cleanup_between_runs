@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose down && sudo rm -rf squidcerts myx509
+docker-compose down && sudo rm -rf myx509

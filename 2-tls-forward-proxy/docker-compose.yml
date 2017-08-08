@@ -52,9 +52,6 @@ services:
     volumes:
       - ./utils/wait-for-host-and-port:/wait-for-host-and-port:ro
       - ./utils/wait-for-files.sh:/wait-for-files.sh:ro
-      - ./utils/gen-squid-CA-cert-and-truststore:/gen-squid-CA-cert-and-truststore:ro
-      - ./config/openssl.cnf.server.client:/openssl.cnf.server.client:ro
-      - ./squidcerts:/squidcerts
       # Remote next after debugging and also remove line copying squid.conf
       - ./squid:/squid:ro
       - ./myx509:/x509:ro
@@ -69,7 +66,6 @@ services:
                              example.com
                              443
                          && cp /squid/squid.conf /etc/squid/squid.conf
-                         && /gen-squid-CA-cert-and-truststore
                          && /sbin/entrypoint.sh"
 
   onprem:
@@ -78,7 +74,6 @@ services:
       - ./config/onprem-config.xml:/kaazing-gateway/conf/gateway-config.xml:ro
       #- ./config/log4j-config.xml:/kaazing-gateway/conf/log4j-config.xml:ro
       - ./config/log4j-trace-config.xml:/kaazing-gateway/conf/log4j-config.xml:ro
-      - ./squidcerts:/squidcerts:ro
       - ./utils/wait-for-files.sh:/wait-for-files.sh:ro
       - ./utils/wait-for-host-and-port:/wait-for-host-and-port:ro
       - ./myx509:/x509
@@ -95,12 +90,10 @@ services:
                      && /wait-for-files.sh
                          /x509/stores/keystore-cloud.jceks
                          /x509/stores/truststore-cloud.jceks
-                         /squidcerts/squid.crt
                       && cp /x509/stores/keystore-cloud.jceks /x509/stores/keystore-onprem.jceks
                       && cp /x509/stores/truststore-cloud.jceks /x509/stores/truststore-onprem.jceks
                       && echo ab987c > /x509/stores/keystore-onprem.pw
                       && echo changeit > /x509/stores/truststore-onprem.pw
-                      && keytool -importcert -trustcacerts -noprompt -keystore /x509/stores/truststore-onprem.jceks -storepass changeit -file /squidcerts/squid.crt
                       && gateway.start"
 
   server-a:
