@@ -100,7 +100,11 @@ The docker-compose.yml has both log4j-config.xml and log4j-trace-config.xml avai
 # Use of Squid configured as "SSL-bump" forward proxy
 
 The Squid proxy is configured as an SSL-bump (AKA MITM) forward proxy. The *onprem* gateway has these Java system properties defined for it:
--D http.proxyHost=squid -Dhttp.proxyPort=3128
+
+```
+-Dhttp.proxyHost=squid
+-Dhttp.proxyPort=3128
+```
 
 When the squid container starts, it imports the truststore that was generated for the onprem gateway so that it trusts the cert from the example.com gateway. Further, it also generates a key, and a CA cert, and signed a cert. When the onprem gateway starts, it imports this CA cert into its truststore so it trusts the cert served by Squid.
 
