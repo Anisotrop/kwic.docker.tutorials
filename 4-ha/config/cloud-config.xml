@@ -46,11 +46,12 @@
     <type>balancer</type>
 
     <accept-options>
-      <ssl.verify-client>required</ssl.verify-client>
+      <tls.verify-client>required</tls.verify-client>
       <!-- <http.transport>tcp://@eth0:${cloud-port}</http.transport> -->
       <!-- The previous line should work, except for bug kaazing/tickets#1059 -->
       <!-- Workaround: Use tcp.bind instead -->
-      <tcp.bind>443</tcp.bind>
+      <!-- <tcp.bind>443</tcp.bind> -->
+      <tls.transport>tcp://0.0.0.0:443</tls.transport>
     </accept-options>
   </service>
 
@@ -66,7 +67,7 @@
 
     <accept-options>
       <ws.inactivity.timeout>55 seconds</ws.inactivity.timeout>
-      <ssl.verify-client>required</ssl.verify-client>
+      <tls.verify-client>required</tls.verify-client>
     </accept-options>
 
   </service>
@@ -82,8 +83,12 @@
 
     <truststore>
       <type>JCEKS</type>
-      <file>/x509/stores/truststore-cloud.jceks</file>
-      <password-file>/x509/stores/truststore-cloud.pw</password-file>
+      <!-- <file>/x509/stores/truststore-cloud.jceks</file> -->
+      <!-- <password-file>/x509/stores/truststore-cloud.pw</password-file> -->
+
+      <!-- Force ssl.client-verify to fail -->
+      <file>/kaazing-gateway/conf/truststore.db</file>
+      <password-file>/kaazing-gateway/conf/truststore.pw</password-file>
     </truststore>
 
   </security>
